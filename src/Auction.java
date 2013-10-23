@@ -1,6 +1,6 @@
 import java.rmi.*;
 
-public interface Auction extends java.rmi.Remote {
+public interface Auction extends Remote {
 
     public void bid(long itemNumber, long bidAmount)
             throws RemoteException;
