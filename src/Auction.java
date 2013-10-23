@@ -8,7 +8,7 @@ public interface Auction extends Remote {
     public void addItem(Item item)
             throws RemoteException;
 
-    public void newUser(User user)
+    public boolean addUser(User user)
             throws RemoteException;
 
     public boolean login(User user)
