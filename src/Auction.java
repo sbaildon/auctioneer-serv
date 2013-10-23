@@ -7,4 +7,6 @@ public interface Auction extends Remote {
 
     public void addItem(String name, long timeAvailable)
             throws RemoteException;
+
+    //saying hello
 }
