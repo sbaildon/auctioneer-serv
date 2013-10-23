@@ -5,7 +5,7 @@
     <ignored path="Auctioneer.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/AuctionInterface.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382437045582" ignored="false" />
-    <file path="/Auctioneer.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382566418960" ignored="false" />
+    <file path="/Auctioneer.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382566788566" ignored="false" />
     <file path="/AuctioneerServer.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382437469914" ignored="false" />
     <file path="/fragment.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382565132332" ignored="false" />
     <file path="/User.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382533556547" ignored="false" />
@@ -14,9 +14,10 @@
     <file path="/GUI.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382563108884" ignored="false" />
     <file path="$PROJECT_DIR$/../Auctioneer/src/AuctionClient.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382566187107" ignored="false" />
     <file path="/AuctionClient.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382565379102" ignored="false" />
-    <file path="$PROJECT_DIR$/../Auctioneer/src/Auction.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382565094970" ignored="false" />
+    <file path="$PROJECT_DIR$/../Auctioneer/src/Auction.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382566741808" ignored="false" />
     <file path="/Item.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382565000026" ignored="false" />
-    <file path="$PROJECT_DIR$/../Auctioneer/src/User.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382565133328" ignored="false" />
+    <file path="$PROJECT_DIR$/../Auctioneer/src/User.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382566732011" ignored="false" />
+    <file path="$PROJECT_DIR$/../Auctioneer/src/Item.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382566735826" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,19 +78,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Auction.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Auction.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Auction.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="35" selection-start="368" selection-end="368" vertical-scroll-proportion="0.36671802">
+            <state line="16" column="0" selection-start="371" selection-end="371" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Auctioneer.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="Auctioneer.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Auctioneer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="24" selection-start="521" selection-end="521" vertical-scroll-proportion="0.0">
+            <state line="24" column="9" selection-start="706" selection-end="706" vertical-scroll-proportion="0.6286595">
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#148#154#0" expanded="true" />
@@ -102,7 +103,7 @@
       <file leaf-file-name="User.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/User.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="17" selection-start="17" selection-end="17" vertical-scroll-proportion="0.0">
+            <state line="6" column="28" selection-start="131" selection-end="131" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -111,7 +112,7 @@
       <file leaf-file-name="Item.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Item.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="45" selection-start="588" selection-end="588" vertical-scroll-proportion="0.0">
+            <state line="13" column="31" selection-start="0" selection-end="655" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -140,8 +141,8 @@
         <option value="$PROJECT_DIR$/src/AuctioneerServer.java" />
         <option value="$PROJECT_DIR$/src/User.java" />
         <option value="$PROJECT_DIR$/src/Auction.java" />
-        <option value="$PROJECT_DIR$/src/Auctioneer.java" />
         <option value="$PROJECT_DIR$/src/Item.java" />
+        <option value="$PROJECT_DIR$/src/Auctioneer.java" />
       </list>
     </option>
   </component>
@@ -572,35 +573,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Auctioneer.java">
+    <entry file="file://$PROJECT_DIR$/src/Auction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="24" selection-start="521" selection-end="521" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#148#154#0" expanded="true" />
-            <element signature="e#199#205#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/User.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="17" selection-start="17" selection-end="17" vertical-scroll-proportion="0.0">
+        <state line="16" column="0" selection-start="371" selection-end="371" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Item.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="45" selection-start="588" selection-end="588" vertical-scroll-proportion="0.0">
+        <state line="13" column="31" selection-start="0" selection-end="655" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Auction.java">
+    <entry file="file://$PROJECT_DIR$/src/User.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="35" selection-start="368" selection-end="368" vertical-scroll-proportion="0.36671802">
+        <state line="6" column="28" selection-start="131" selection-end="131" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Auctioneer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="9" selection-start="706" selection-end="706" vertical-scroll-proportion="0.6286595">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#148#154#0" expanded="true" />
+            <element signature="e#199#205#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

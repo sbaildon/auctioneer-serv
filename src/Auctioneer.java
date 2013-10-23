@@ -17,7 +17,12 @@ public class Auctioneer implements Auction {
     }
 
     public void newUser(User user) throws RemoteException {
-        users.add(user);
+        int i;
+        for(i = 0; i < users.size(); i++) {
+            if (users.get(i).userName == user.userName && users.get(i).email == user.email) {
+                users.add(user);
+            }
+        }
     }
 
     public boolean login(User user) throws RemoteException {
