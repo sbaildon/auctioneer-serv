@@ -19,18 +19,22 @@ public class Auctioneer implements Auction {
     public boolean addUser(User user) throws RemoteException {
         int i;
         for(i = 0; i < users.size(); i++) {
-            if (users.get(i).email == user.email) {
+            if (users.get(i).email.equalsIgnoreCase(user.email)) {
+                System.out.println("Attempted to add duplicate user: " + user.email);
                 return false;
             }
+            System.out.println(users.get(i).email);
         }
         users.add(user);
+        System.out.println("Added user: " + user.email);
         return true;
     }
 
     public boolean login(User user) throws RemoteException {
         int i;
         for(i = 0; i < users.size(); i++) {
-            if (users.get(i).userName == user.userName && users.get(i).email == user.email) {
+            if (users.get(i).userName.equalsIgnoreCase(user.userName) && users.get(i).email.equalsIgnoreCase(user.email)) {
+                System.out.println("User " + user.userName + "(" + user.email + ") logged in");
                 return true;
             }
         }
