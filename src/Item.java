@@ -6,14 +6,16 @@ public class Item implements Serializable {
     int reserve;
     int currentPrice;
     String name;
-    User user;
+    User owner;
+    User winner;
 
     public Item(User user, String name, int startPrice, int reserve) {
         this.name = name;
         this.reserve = reserve;
         this.ID = new Random(2000).nextInt();
         this.currentPrice = startPrice;
-        this.user = user;
+        this.owner = user;
+        this.winner = null;
     }
 
     public Item(User user,String name, int reserve) {
@@ -21,7 +23,8 @@ public class Item implements Serializable {
         this.reserve = reserve;
         this.ID = new Random(2000).nextInt();
         this.currentPrice = 0;
-        this.user = user;
+        this.owner = user;
+        this.winner = null;
     }
 
 }

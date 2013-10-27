@@ -34,11 +34,24 @@ public class Auctioneer implements Auction {
         int i;
         for(i = 0; i < users.size(); i++) {
             if (users.get(i).userName.equalsIgnoreCase(user.userName) && users.get(i).email.equalsIgnoreCase(user.email)) {
-                System.out.println("User " + user.userName + "(" + user.email + ") logged in");
+                System.out.println("User " + user.userName + " (" + user.email + ") logged in");
                 return true;
             }
         }
         return false;
+    }
+
+    public ArrayList getAuctions() {
+        ArrayList<Item> auctions = new ArrayList<Item>();
+        int i;
+
+        for (i = 0; i < items.size(); i++) {
+            if (items.get(i).winner == null) {
+                auctions.add(items.get(i));
+            }
+        }
+
+        return auctions;
     }
 
 }
