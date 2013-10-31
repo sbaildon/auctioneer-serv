@@ -14,6 +14,7 @@ public class Auctioneer implements Auction {
 
     public boolean addItem(Item item) throws RemoteException {
         if (items.add(item)) {
+            System.out.println("Added item: " + item.name + " (" + item.ID + ") " + item.owner.userName);
             return true;
         } return false;
     }
@@ -43,12 +44,25 @@ public class Auctioneer implements Auction {
         return false;
     }
 
-    public ArrayList getAuctions() {
+    public ArrayList getAvailableAuctions() {
         ArrayList<Item> auctions = new ArrayList<Item>();
         int i;
 
         for (i = 0; i < items.size(); i++) {
             if (items.get(i).winner == null) {
+                auctions.add(items.get(i));
+            }
+        }
+
+        return auctions;
+    }
+
+    public ArrayList getWonAuctions(User user) {
+        ArrayList<Item> auctions = new ArrayList<Item>();
+
+        int i;
+        for (i = 0; i < items.size(); i++) {
+            if (items.get(i).winner.email.equalsIgnoreCase(user.email)) {
                 auctions.add(items.get(i));
             }
         }
