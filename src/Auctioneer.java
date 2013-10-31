@@ -12,8 +12,10 @@ public class Auctioneer implements Auction {
     public void bid(long itemNumber, long bidAmount) throws RemoteException {
     }
 
-    public void addItem(Item item) throws RemoteException {
-        items.add(item);
+    public boolean addItem(Item item) throws RemoteException {
+        if (items.add(item)) {
+            return true;
+        } return false;
     }
 
     public boolean addUser(User user) throws RemoteException {
