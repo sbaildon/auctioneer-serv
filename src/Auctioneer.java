@@ -49,7 +49,7 @@ public class Auctioneer implements Auction {
         int i;
 
         for (i = 0; i < items.size(); i++) {
-            if (items.get(i).winner == null) {
+            if (items.get(i).won == false) {
                 auctions.add(items.get(i));
             }
         }
@@ -62,12 +62,24 @@ public class Auctioneer implements Auction {
 
         int i;
         for (i = 0; i < items.size(); i++) {
-            if (items.get(i).winner.email.equalsIgnoreCase(user.email)) {
+            if (items.get(i).won == true && items.get(i).bidder.email.equalsIgnoreCase(user.email)) {
                 auctions.add(items.get(i));
             }
         }
 
         return auctions;
+    }
+
+    public boolean closeAuction(int id, User user) {
+        int i;
+        for (i = 0; i < items.size(); i++) {
+            if (items.get(i).ID == id) {
+                items.get(i).won = true;
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

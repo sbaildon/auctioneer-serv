@@ -9,12 +9,18 @@ public interface Auction extends Remote {
     public boolean addItem(Item item)
             throws RemoteException;
 
+    public boolean closeAuction(int id, User user)
+            throws RemoteException;
+
     public boolean addUser(User user)
             throws RemoteException;
 
     public boolean login(User user)
             throws RemoteException;
 
-    public ArrayList getAuctions()
+    public ArrayList getAvailableAuctions()
+            throws RemoteException;
+
+    public ArrayList getWonAuctions(User user)
             throws RemoteException;
 }
