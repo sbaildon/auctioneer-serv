@@ -33,7 +33,7 @@ public class Auctioneer implements Auction {
         int i;
         for(i = 0; i < users.size(); i++) {
             if (users.get(i).email.equalsIgnoreCase(user.email)) {
-                System.out.println("[-][user]: Attemped to add duplicate user " + user.email);
+                System.out.println("[-][user]: attempted to add duplicate user " + user.email);
                 return false;
             }
         }
@@ -46,7 +46,7 @@ public class Auctioneer implements Auction {
         int i;
         for(i = 0; i < users.size(); i++) {
             if (users.get(i).userName.equalsIgnoreCase(user.userName) && users.get(i).email.equalsIgnoreCase(user.email)) {
-                System.out.println("[+][user] " + user.email + " logged in");
+                System.out.println("[+][user]: " + user.email + " logged in");
                 return true;
             }
         }
@@ -68,11 +68,12 @@ public class Auctioneer implements Auction {
 
     public ArrayList getWonAuctions(User user) {
         ArrayList<Item> auctions = new ArrayList<Item>();
+        String email = user.email;
 
         int i;
         for (i = 0; i < items.size(); i++) {
             if (items.get(i).won == true) {
-                if (items.get(i).bidder.email.equalsIgnoreCase(user.email)) {
+                if (items.get(i).bidder.email.equalsIgnoreCase(email)) {
                     auctions.add(items.get(i));
                 }
             }

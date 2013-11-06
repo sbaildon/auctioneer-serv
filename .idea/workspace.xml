@@ -5,16 +5,16 @@
     <ignored path="Auctioneer.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/AuctionInterface.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382437045582" ignored="false" />
-    <file path="/Auctioneer.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1383746703686" ignored="false" />
+    <file path="/Auctioneer.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1383756949965" ignored="false" />
     <file path="/AuctioneerServer.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382437469914" ignored="false" />
     <file path="/fragment.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1383240752747" ignored="false" />
     <file path="/User.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382533556547" ignored="false" />
     <file path="/Auction.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1383746686625" ignored="false" />
-    <file path="$PROJECT_DIR$/../Auctioneer/src/GUI.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1383746394884" ignored="false" />
-    <file path="/GUI.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1383501167434" ignored="false" />
-    <file path="$PROJECT_DIR$/../Auctioneer/src/AuctionClient.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1383501141718" ignored="false" />
-    <file path="/AuctionClient.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1383501127029" ignored="false" />
-    <file path="$PROJECT_DIR$/../Auctioneer/src/Auction.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1383499842013" ignored="false" />
+    <file path="$PROJECT_DIR$/../Auctioneer/src/GUI.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1383757576401" ignored="false" />
+    <file path="/GUI.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1383757576064" ignored="false" />
+    <file path="$PROJECT_DIR$/../Auctioneer/src/AuctionClient.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1383748227746" ignored="false" />
+    <file path="/AuctionClient.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1383747819098" ignored="false" />
+    <file path="$PROJECT_DIR$/../Auctioneer/src/Auction.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1383746793438" ignored="false" />
     <file path="/Item.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1383501201776" ignored="false" />
     <file path="$PROJECT_DIR$/../Auctioneer/src/User.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1382891083097" ignored="false" />
     <file path="$PROJECT_DIR$/../Auctioneer/src/Item.java" changelist="6b48d254-2da7-4e92-92ea-c6fe6693e201" time="1383501194468" ignored="false" />
@@ -82,16 +82,16 @@
       <file leaf-file-name="Auction.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Auction.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="14" selection-start="105" selection-end="105" vertical-scroll-proportion="0.0">
+            <state line="25" column="1" selection-start="646" selection-end="646" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Auctioneer.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Auctioneer.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Auctioneer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="26" selection-start="664" selection-end="664" vertical-scroll-proportion="0.7113402">
+            <state line="9" column="5" selection-start="258" selection-end="258" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -115,10 +115,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AuctioneerServer.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="AuctioneerServer.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/AuctioneerServer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="5" selection-start="588" selection-end="588" vertical-scroll-proportion="0.0">
+            <state line="16" column="5" selection-start="588" selection-end="588" vertical-scroll-proportion="0.42168674">
               <folding />
             </state>
           </provider>
@@ -526,13 +526,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AuctioneerServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="5" selection-start="588" selection-end="588" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Item.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="24" column="31" selection-start="632" selection-end="632" vertical-scroll-proportion="0.0">
@@ -549,14 +542,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Auction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="14" selection-start="105" selection-end="105" vertical-scroll-proportion="0.0">
+        <state line="25" column="1" selection-start="646" selection-end="646" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Auctioneer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="26" selection-start="664" selection-end="664" vertical-scroll-proportion="0.7113402">
+        <state line="9" column="5" selection-start="258" selection-end="258" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AuctioneerServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="5" selection-start="588" selection-end="588" vertical-scroll-proportion="0.42168674">
           <folding />
         </state>
       </provider>
