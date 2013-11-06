@@ -14,16 +14,17 @@ public class Auctioneer implements Auction {
         for (i = 0; i < items.size(); i++) {
             if (items.get(i).currentPrice < bidAmount) {
                 items.get(i).currentPrice = bidAmount;
+                System.out.println("[+][item]: " + items.get(i).name + " (" + items.get(i).ID + ") was bid on");
                 return 0;
             }
         }
-
+        System.out.println("[-][item]: failed bid on " + items.get(i).name + " (" + items.get(i).ID + ")");
         return 1;
     }
 
     public boolean addItem(Item item) throws RemoteException {
         if (items.add(item)) {
-            System.out.println("Added item: " + item.name + " (" + item.ID + ") " + item.owner.userName);
+            System.out.println("[+][item]: " + item.name + " (" + item.ID + ") added to the auction list");
             return true;
         } return false;
     }
@@ -32,13 +33,12 @@ public class Auctioneer implements Auction {
         int i;
         for(i = 0; i < users.size(); i++) {
             if (users.get(i).email.equalsIgnoreCase(user.email)) {
-                System.out.println("Attempted to add duplicate user: " + user.email);
+                System.out.println("[-][user]: Attemped to add duplicate user " + user.email);
                 return false;
             }
-            System.out.println(users.get(i).email);
         }
         users.add(user);
-        System.out.println("Added user: " + user.email);
+        System.out.println("[+][user]: " + user.email + " was registered");
         return true;
     }
 
@@ -46,7 +46,7 @@ public class Auctioneer implements Auction {
         int i;
         for(i = 0; i < users.size(); i++) {
             if (users.get(i).userName.equalsIgnoreCase(user.userName) && users.get(i).email.equalsIgnoreCase(user.email)) {
-                System.out.println("User " + user.userName + " (" + user.email + ") logged in");
+                System.out.println("[+][user] " + user.email + " logged in");
                 return true;
             }
         }
@@ -87,11 +87,14 @@ public class Auctioneer implements Auction {
             if (items.get(i).ID == id && items.get(i).owner.userName.equalsIgnoreCase(user.userName)) {
                 items.get(i).won = true;
                 if (items.get(i).currentPrice > items.get(i).reserve) {
+                    System.out.println("[+][item]: " + items.get(i).name + " (" + items.get(i).ID + ") was closed and beat its reserve");
                     return 2;
                 } else
+                    System.out.println("[+][item]: " + items.get(i).name + " (" + items.get(i).ID + ") was closed but didn't beat reserve");
                     return 1;
             }
         }
+        System.out.println("[-][item]: "  + items.get(i).name + " (" + items.get(i).ID + ") could not be closed");
         return 0;
     }
 
