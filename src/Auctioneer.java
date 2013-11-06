@@ -9,7 +9,16 @@ public class Auctioneer implements Auction {
         super();
     }
 
-    public void bid(long itemNumber, long bidAmount) throws RemoteException {
+    public int bid(int ID, int bidAmount) throws RemoteException {
+        int i;
+        for (i = 0; i < items.size(); i++) {
+            if (items.get(i).currentPrice < bidAmount) {
+                items.get(i).currentPrice = bidAmount;
+                return 0;
+            }
+        }
+
+        return 1;
     }
 
     public boolean addItem(Item item) throws RemoteException {
@@ -62,24 +71,28 @@ public class Auctioneer implements Auction {
 
         int i;
         for (i = 0; i < items.size(); i++) {
-            if (items.get(i).won == true && items.get(i).bidder.email.equalsIgnoreCase(user.email)) {
-                auctions.add(items.get(i));
+            if (items.get(i).won == true) {
+                if (items.get(i).bidder.email.equalsIgnoreCase(user.email)) {
+                    auctions.add(items.get(i));
+                }
             }
         }
 
         return auctions;
     }
 
-    public boolean closeAuction(int id, User user) {
+    public int closeAuction(int id, User user) {
         int i;
         for (i = 0; i < items.size(); i++) {
-            if (items.get(i).ID == id) {
+            if (items.get(i).ID == id && items.get(i).owner.userName.equalsIgnoreCase(user.userName)) {
                 items.get(i).won = true;
-                return true;
+                if (items.get(i).currentPrice > items.get(i).reserve) {
+                    return 2;
+                } else
+                    return 1;
             }
         }
-
-        return false;
+        return 0;
     }
 
 }
