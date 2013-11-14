@@ -6,6 +6,7 @@ public class Auctioneer implements Auction {
     ArrayList<User> users = new ArrayList<User>();
     HashMap<Integer, Item> items = new HashMap<Integer, Item>();
     HashMap<Integer, Item> itemsClosed = new HashMap<Integer, Item>();
+    int id = 0;
 
     public Auctioneer() {
         super();
@@ -35,12 +36,11 @@ public class Auctioneer implements Auction {
     }
 
     public boolean addItem(Item item) throws RemoteException {
-        int id = items.size() + 1;
-        Item temp = items.put(id, item);
+        id = id +  1;
+        items.put(id, item);
 
         System.out.println("[+][item]: " + item.name + " (" + id + ") added to the auction list");
         return true;
-
     }
 
     public boolean addUser(User user) throws RemoteException {
@@ -64,6 +64,7 @@ public class Auctioneer implements Auction {
                 return true;
             }
         }
+        System.out.println("[-][user]: invalid credentials for login");
         return false;
     }
 
@@ -91,6 +92,8 @@ public class Auctioneer implements Auction {
         }
         if (item.getReserve() > item.getPrice()) {
             System.out.println("[-][item]: " + item.name + " was closed, but didn't meet reserve");
+            items.remove(ID);
+            itemsClosed.put(ID, item);
             return 1;
         } else {
             System.out.println("[+][item]: " + item.name + " was closed successfully");
