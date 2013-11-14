@@ -20,8 +20,8 @@ public class Auctioneer implements Auction {
             return 3;
         }
 
-        if (!item.getBidder().equalsIgnoreCase(user.getEmail())) {
-            System.out.println("[-][item]: " + item.name + " was bid on by someone other than its owner");
+        if (item.getBidder().equalsIgnoreCase(user.getEmail())) {
+            System.out.println("[-][item]: " + item.name + " was bid on by its owner");
             return 2;
         }
         if (item.getPrice() > bidAmount) {
@@ -68,8 +68,8 @@ public class Auctioneer implements Auction {
         return false;
     }
 
-    public ArrayList getAvailableAuctions() throws RemoteException {
-        return null;
+    public HashMap getAvailableAuctions() throws RemoteException {
+        return items;
     }
 
     public ArrayList getSoldAuctions(User user) throws RemoteException {
@@ -91,7 +91,7 @@ public class Auctioneer implements Auction {
             return 2;
         }
         if (item.getReserve() > item.getPrice()) {
-            System.out.println("[-][item]: " + item.name + " was closed, but didn't meet reserve");
+            System.out.println("[+][item]: " + item.name + " was closed, but didn't meet reserve");
             items.remove(ID);
             itemsClosed.put(ID, item);
             return 1;

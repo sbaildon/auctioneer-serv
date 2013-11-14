@@ -1,5 +1,6 @@
 import java.rmi.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public interface Auction extends Remote {
 
@@ -18,7 +19,7 @@ public interface Auction extends Remote {
     public boolean login(User user)
             throws RemoteException;
 
-    public ArrayList getAvailableAuctions()
+    public HashMap getAvailableAuctions()
             throws RemoteException;
 
     public ArrayList getSoldAuctions(User user)
