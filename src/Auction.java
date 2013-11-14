@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public interface Auction extends Remote {
 
-    public int bid(int itemID, int bidAmount)
+    public int bid(int itemID, int bidAmount, User user)
             throws RemoteException;
 
     public boolean addItem(Item item)
@@ -21,6 +21,6 @@ public interface Auction extends Remote {
     public ArrayList getAvailableAuctions()
             throws RemoteException;
 
-    public ArrayList getWonAuctions(User user)
+    public ArrayList getSoldAuctions(User user)
             throws RemoteException;
 }

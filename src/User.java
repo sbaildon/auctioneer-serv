@@ -8,4 +8,12 @@ public class User implements Serializable {
         this.userName = userName;
         this.email = email;
     }
+
+    protected String getName() {
+        return this.userName;
+    }
+
+    protected String getEmail() {
+        return this.email;
+    }
 }

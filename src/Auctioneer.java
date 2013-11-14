@@ -1,39 +1,53 @@
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Auctioneer implements Auction {
     ArrayList<User> users = new ArrayList<User>();
-    ArrayList<Item> items = new ArrayList<Item>();
+    HashMap<Integer, Item> items = new HashMap<Integer, Item>();
+    HashMap<Integer, Item> itemsClosed = new HashMap<Integer, Item>();
 
     public Auctioneer() {
         super();
     }
 
-    public int bid(int ID, int bidAmount) throws RemoteException {
-        int i;
-        for (i = 0; i < items.size(); i++) {
-            if (items.get(i).currentPrice < bidAmount) {
-                items.get(i).currentPrice = bidAmount;
-                System.out.println("[+][item]: " + items.get(i).name + " (" + items.get(i).ID + ") was bid on");
-                return 0;
-            }
+    public int bid(int ID, int bidAmount, User user) throws RemoteException {
+        Item item = items.get(ID);
+
+        if (item == null) {
+            System.out.println("[-][item]: someone tried to bid on invalid auction");
+            return 3;
         }
-        System.out.println("[-][item]: failed bid on " + items.get(i).name + " (" + items.get(i).ID + ")");
-        return 1;
+
+        if (!item.getBidder().equalsIgnoreCase(user.getEmail())) {
+            System.out.println("[-][item]: " + item.name + " was bid on by someone other than its owner");
+            return 2;
+        }
+        if (item.getPrice() > bidAmount) {
+            System.out.println("[-][item]: bid on " + item.name + " was too little");
+            return 1;
+        }
+
+        item.setPrice(bidAmount);
+        item.setBidder(user);
+        System.out.println("[+][item]: bid on " + item.name + " was successful");
+        return 0;
     }
 
     public boolean addItem(Item item) throws RemoteException {
-        if (items.add(item)) {
-            System.out.println("[+][item]: " + item.name + " (" + item.ID + ") added to the auction list");
-            return true;
-        } return false;
+        int id = items.size() + 1;
+        Item temp = items.put(id, item);
+
+        System.out.println("[+][item]: " + item.name + " (" + id + ") added to the auction list");
+        return true;
+
     }
 
     public boolean addUser(User user) throws RemoteException {
         int i;
         for(i = 0; i < users.size(); i++) {
-            if (users.get(i).email.equalsIgnoreCase(user.email)) {
-                System.out.println("[-][user]: attempted to add duplicate user " + user.email);
+            if (users.get(i).getEmail().equalsIgnoreCase(user.getEmail())) {
+                System.out.println("[-][user]: attempted to add duplicate user " + user.getEmail());
                 return false;
             }
         }
@@ -45,7 +59,7 @@ public class Auctioneer implements Auction {
     public boolean login(User user) throws RemoteException {
         int i;
         for(i = 0; i < users.size(); i++) {
-            if (users.get(i).userName.equalsIgnoreCase(user.userName) && users.get(i).email.equalsIgnoreCase(user.email)) {
+            if (users.get(i).getName().equalsIgnoreCase(user.getName()) && users.get(i).getEmail().equalsIgnoreCase(user.getEmail())) {
                 System.out.println("[+][user]: " + user.email + " logged in");
                 return true;
             }
@@ -53,50 +67,37 @@ public class Auctioneer implements Auction {
         return false;
     }
 
-    public ArrayList getAvailableAuctions() {
-        ArrayList<Item> auctions = new ArrayList<Item>();
-        int i;
-
-        for (i = 0; i < items.size(); i++) {
-            if (items.get(i).won == false) {
-                auctions.add(items.get(i));
-            }
-        }
-
-        return auctions;
+    public ArrayList getAvailableAuctions() throws RemoteException {
+        return null;
     }
 
-    public ArrayList getWonAuctions(User user) {
-        ArrayList<Item> auctions = new ArrayList<Item>();
-        String email = user.email;
+    public ArrayList getSoldAuctions(User user) throws RemoteException {
 
-        int i;
-        for (i = 0; i < items.size(); i++) {
-            if (items.get(i).won == true) {
-                if (items.get(i).bidder.email.equalsIgnoreCase(email)) {
-                    auctions.add(items.get(i));
-                }
-            }
-        }
 
-        return auctions;
+        return null;
     }
 
-    public int closeAuction(int id, User user) {
-        int i;
-        for (i = 0; i < items.size(); i++) {
-            if (items.get(i).ID == id && items.get(i).owner.userName.equalsIgnoreCase(user.userName)) {
-                items.get(i).won = true;
-                if (items.get(i).currentPrice > items.get(i).reserve) {
-                    System.out.println("[+][item]: " + items.get(i).name + " (" + items.get(i).ID + ") was closed and beat its reserve");
-                    return 2;
-                } else
-                    System.out.println("[+][item]: " + items.get(i).name + " (" + items.get(i).ID + ") was closed but didn't beat reserve");
-                    return 1;
-            }
+    public int closeAuction(int ID, User user) {
+        Item item = items.get(ID);
+
+        if (item == null) {
+            System.out.println("[-][item]: someone tried to close an invalid auction");
+            return 3;
         }
-        System.out.println("[-][item]: "  + items.get(i).name + " (" + items.get(i).ID + ") could not be closed");
-        return 0;
+
+        if (!item.getBidder().equalsIgnoreCase(user.getEmail())) {
+            System.out.println("[-][item]: " + user.getName() + " tried to close auction that was not their own");
+            return 2;
+        }
+        if (item.getReserve() > item.getPrice()) {
+            System.out.println("[-][item]: " + item.name + " was closed, but didn't meet reserve");
+            return 1;
+        } else {
+            System.out.println("[+][item]: " + item.name + " was closed successfully");
+            items.remove(ID);
+            itemsClosed.put(ID, item);
+            return 0;
+        }
     }
 
 }
