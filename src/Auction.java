@@ -22,6 +22,6 @@ public interface Auction extends Remote {
     public HashMap getAvailableAuctions()
             throws RemoteException;
 
-    public ArrayList getSoldAuctions(User user)
+    public HashMap getSoldAuctions(User user)
             throws RemoteException;
 }

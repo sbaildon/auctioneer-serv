@@ -1,6 +1,7 @@
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Auctioneer implements Auction {
     ArrayList<User> users = new ArrayList<User>();
@@ -10,28 +11,29 @@ public class Auctioneer implements Auction {
 
     public Auctioneer() {
         super();
+
     }
 
     public int bid(int ID, int bidAmount, User user) throws RemoteException {
         Item item = items.get(ID);
 
         if (item == null) {
-            System.out.println("[-][item]: someone tried to bid on invalid auction");
+            System.out.println("[-][item]: " + user.getEmail() + " tried to bid on invalid auction");
             return 3;
         }
 
-        if (item.getBidder().equalsIgnoreCase(user.getEmail())) {
-            System.out.println("[-][item]: " + item.name + " was bid on by its owner");
+        if (item.getOwner().equalsIgnoreCase(user.getEmail())) {
+            System.out.println("[-][item]: " + item.name + " (" + ID + ") was bid on by its owner");
             return 2;
         }
         if (item.getPrice() > bidAmount) {
-            System.out.println("[-][item]: bid on " + item.name + " was too little");
+            System.out.println("[-][item]: bid on " + item.name + " (" + ID + ") was too little");
             return 1;
         }
 
+        System.out.println("[+][item]: bid on " + item.name + " was successful " + item.getPrice() +" -> " + bidAmount);
         item.setPrice(bidAmount);
         item.setBidder(user);
-        System.out.println("[+][item]: bid on " + item.name + " was successful");
         return 0;
     }
 
@@ -72,35 +74,44 @@ public class Auctioneer implements Auction {
         return items;
     }
 
-    public ArrayList getSoldAuctions(User user) throws RemoteException {
+    public HashMap getSoldAuctions(User user) throws RemoteException {
+        HashMap<Integer, Item> auctions = new HashMap<Integer, Item>();
+        String email = user.getEmail();
 
+        int i;
+        for (i = 1; i <= itemsClosed.size(); i++) {
+            if (itemsClosed.get(i).getBidder().equals(email)) {
+                auctions.put(i, itemsClosed.get(i));
+            }
+        }
 
-        return null;
+        return auctions;
     }
 
-    public int closeAuction(int ID, User user) {
+    public int closeAuction(int ID, User user) throws RemoteException {
         Item item = items.get(ID);
 
         if (item == null) {
-            System.out.println("[-][item]: someone tried to close an invalid auction");
+            System.out.println("[-][item]: " + user.getEmail() + " tried to close an invalid auction");
             return 3;
         }
 
-        if (!item.getBidder().equalsIgnoreCase(user.getEmail())) {
-            System.out.println("[-][item]: " + user.getName() + " tried to close auction that was not their own");
+        if (!item.getOwner().equalsIgnoreCase(user.getEmail())) {
+            System.out.println("[-][item]: " + user.getEmail() + " tried to close auction that was not their own");
             return 2;
         }
         if (item.getReserve() > item.getPrice()) {
-            System.out.println("[+][item]: " + item.name + " was closed, but didn't meet reserve");
+            System.out.println("[+][item]: " + item.getName() + " (" + ID + ") was closed, but didn't meet reserve");
             items.remove(ID);
             itemsClosed.put(ID, item);
             return 1;
         } else {
-            System.out.println("[+][item]: " + item.name + " was closed successfully");
+            System.out.println("[+][item]: " + item.getName() + " (" + ID + ") was closed successfully");
             items.remove(ID);
             itemsClosed.put(ID, item);
             return 0;
         }
+
     }
 
 }

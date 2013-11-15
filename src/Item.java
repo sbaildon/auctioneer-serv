@@ -32,8 +32,16 @@ public class Item implements Serializable {
         return this.bidder.email;
     }
 
+    protected String getOwner() {
+        return this.owner.email;
+    }
+
     protected int getReserve() {
         return this.reserve;
+    }
+
+    protected String getName() {
+        return this.name;
     }
 
 
