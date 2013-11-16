@@ -11,7 +11,6 @@ public class Auctioneer implements Auction {
 
     public Auctioneer() {
         super();
-
     }
 
     public int bid(int ID, int bidAmount, User user) throws RemoteException {
@@ -31,9 +30,9 @@ public class Auctioneer implements Auction {
             return 1;
         }
 
-        System.out.println("[+][item]: bid on " + item.name + " was successful " + item.getPrice() +" -> " + bidAmount);
-        item.setPrice(bidAmount);
-        item.setBidder(user);
+        System.out.println("[+][item]: bid on " + item.name + " was successful " + item.getPrice() + " -> " + bidAmount);
+        items.get(ID).setPrice(bidAmount);
+        items.get(ID).setBidder(user);
         return 0;
     }
 
@@ -61,7 +60,7 @@ public class Auctioneer implements Auction {
     public boolean login(User user) throws RemoteException {
         int i;
         for(i = 0; i < users.size(); i++) {
-            if (users.get(i).getName().equalsIgnoreCase(user.getName()) && users.get(i).getEmail().equalsIgnoreCase(user.getEmail())) {
+            if (users.get(i).getName().equals(user.getName()) && users.get(i).getEmail().equals(user.getEmail())) {
                 System.out.println("[+][user]: " + user.email + " logged in");
                 return true;
             }
@@ -78,10 +77,13 @@ public class Auctioneer implements Auction {
         HashMap<Integer, Item> auctions = new HashMap<Integer, Item>();
         String email = user.getEmail();
 
-        int i;
-        for (i = 1; i <= itemsClosed.size(); i++) {
-            if (itemsClosed.get(i).getBidder().equals(email)) {
-                auctions.put(i, itemsClosed.get(i));
+        if (itemsClosed.size() == 0) {
+            return auctions;
+        }
+
+        for (Map.Entry<Integer, Item> e : itemsClosed.entrySet()) {
+            if (e.getValue().getBidder().equals(email)) {
+                auctions.put(e.getKey(), e.getValue());
             }
         }
 
@@ -101,14 +103,12 @@ public class Auctioneer implements Auction {
             return 2;
         }
         if (item.getReserve() > item.getPrice()) {
+            itemsClosed.put(ID, items.remove(ID));
             System.out.println("[+][item]: " + item.getName() + " (" + ID + ") was closed, but didn't meet reserve");
-            items.remove(ID);
-            itemsClosed.put(ID, item);
             return 1;
         } else {
             System.out.println("[+][item]: " + item.getName() + " (" + ID + ") was closed successfully");
-            items.remove(ID);
-            itemsClosed.put(ID, item);
+            itemsClosed.put(ID, items.remove(ID));
             return 0;
         }
 
