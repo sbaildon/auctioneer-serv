@@ -13,7 +13,12 @@ public class Auctioneer implements Auction {
         super();
     }
 
-    public int bid(int ID, int bidAmount, User user) throws RemoteException {
+    /*
+     * Please take note of the correct return values, so they can be
+     * handled properly at the client end.
+     * 3 = fail, 2 = can't bid on own items, 1 = needs more money, 0 = success
+     */
+    public int bid(int ID, double bidAmount, User user) throws RemoteException {
         Item item = items.get(ID);
 
         if (item == null) {
@@ -44,6 +49,10 @@ public class Auctioneer implements Auction {
         return true;
     }
 
+    /*
+     * Every user must have a unique identifier, in this case
+     * it is email. User won't be added unless it's unique
+     */
     public boolean addUser(User user) throws RemoteException {
         int i;
         for(i = 0; i < users.size(); i++) {
@@ -73,6 +82,10 @@ public class Auctioneer implements Auction {
         return items;
     }
 
+    /*
+     * Provide a user and find all auctions where this particular
+     * user is the winner
+     */
     public HashMap getSoldAuctions(User user) throws RemoteException {
         HashMap<Integer, Item> auctions = new HashMap<Integer, Item>();
         String email = user.getEmail();
@@ -90,6 +103,10 @@ public class Auctioneer implements Auction {
         return auctions;
     }
 
+    /*
+     * The user argument user is needed to check that they have the correct
+     * privileges to close the specified auction
+     */
     public int closeAuction(int ID, User user) throws RemoteException {
         Item item = items.get(ID);
 

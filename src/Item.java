@@ -2,13 +2,13 @@ import java.io.Serializable;
 import java.util.Random;
 
 public class Item implements Serializable {
-    int reserve;
-    int currentPrice;
+    double reserve;
+    double currentPrice;
     String name;
     User owner;
     User bidder;
 
-    public Item(User user, String name, int startPrice, int reserve) {
+    public Item(User user, String name, double startPrice, double reserve) {
         this.name = name;
         this.reserve = reserve;
         this.currentPrice = startPrice;
@@ -16,11 +16,11 @@ public class Item implements Serializable {
         this.bidder = user;
     }
 
-    protected void setPrice(int price) {
+    protected void setPrice(double price) {
         this.currentPrice = price;
     }
 
-    protected int getPrice() {
+    protected double getPrice() {
         return this.currentPrice;
     }
 
@@ -36,7 +36,7 @@ public class Item implements Serializable {
         return this.owner.email;
     }
 
-    protected int getReserve() {
+    protected double getReserve() {
         return this.reserve;
     }
 

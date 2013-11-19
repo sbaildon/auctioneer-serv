@@ -13,13 +13,13 @@ public class AuctioneerServer {
 
             /* Debug */
             System.out.println("Server running");
-            User def = new User("username", "email");
-            a.addUser(def);
-            int i;
-            for (i = 0; i < 25; i++) {
-                Item item = new Item(def, "Item", 10, 200);
-                a.addItem(item);
-            }
+            //User def = new User("username", "email");
+            //a.addUser(def);
+            //int i;
+            //for (i = 0; i < 25; i++) {
+            //    Item item = new Item(def, "Item", 10, 200);
+            //    a.addItem(item);
+            //}
             /* End debug */
         } catch (Exception e) {
             System.out.println("Can't create server\n\n" + e);

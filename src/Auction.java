@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public interface Auction extends Remote {
 
-    public int bid(int itemID, int bidAmount, User user)
+    public int bid(int itemID, double bidAmount, User user)
             throws RemoteException;
 
     public boolean addItem(Item item)
