@@ -24,4 +24,7 @@ public interface Auction extends Remote {
 
     public HashMap getSoldAuctions(User user)
             throws RemoteException;
+
+    public String getAuctionWinner(int id)
+            throws RemoteException;
 }

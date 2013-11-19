@@ -30,7 +30,7 @@ public class Auctioneer implements Auction {
             return 1;
         }
 
-        System.out.println("[+][item]: bid on " + item.name + " was successful " + item.getPrice() + " -> " + bidAmount);
+        System.out.println("[+][item]: bid on " + item.name + " was successful £" + item.getPrice() + " -> £" + bidAmount);
         items.get(ID).setPrice(bidAmount);
         items.get(ID).setBidder(user);
         return 0;
@@ -107,11 +107,21 @@ public class Auctioneer implements Auction {
             System.out.println("[+][item]: " + item.getName() + " (" + ID + ") was closed, but didn't meet reserve");
             return 1;
         } else {
-            System.out.println("[+][item]: " + item.getName() + " (" + ID + ") was closed successfully");
             itemsClosed.put(ID, items.remove(ID));
+            System.out.println("[+][item]: " + item.getName() + " (" + ID + ") was closed successfully");
             return 0;
         }
 
+    }
+
+    public String getAuctionWinner(int ID) {
+        Item item = itemsClosed.get(ID);
+
+        if (item == null) {
+            return "Shouldn't have found null";
+        }
+
+        return item.getBidder();
     }
 
 }
