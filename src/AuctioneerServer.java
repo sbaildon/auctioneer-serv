@@ -10,7 +10,6 @@ public class AuctioneerServer {
             Auction a = new Auctioneer();
             Auction stub = (Auction) UnicastRemoteObject.exportObject(a, 0);
             Naming.rebind("//localhost:2020/AuctioneerService", stub);
-            new KeyGen("files/secret.key");
 
             System.out.println("Server running");
         } catch (Exception e) {

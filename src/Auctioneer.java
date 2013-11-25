@@ -1,3 +1,4 @@
+import javax.crypto.SealedObject;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,12 +42,20 @@ public class Auctioneer implements Auction {
         return 0;
     }
 
+    public int bid(int ID, double bidAmount, SealedObject user) throws RemoteException {
+        return 3;
+    }
+
     public boolean addItem(Item item) throws RemoteException {
         id = id +  1;
         items.put(id, item);
 
         System.out.println("[+][item]: " + item.name + " (" + id + ") added to the auction list");
         return true;
+    }
+
+    public boolean addItem(SealedObject item) throws RemoteException {
+        return false;
     }
 
     /*
@@ -66,6 +75,10 @@ public class Auctioneer implements Auction {
         return true;
     }
 
+    public boolean addUser(SealedObject user) throws RemoteException {
+        return false;
+    }
+
     public boolean login(User user) throws RemoteException {
         int i;
         for(i = 0; i < users.size(); i++) {
@@ -75,6 +88,10 @@ public class Auctioneer implements Auction {
             }
         }
         System.out.println("[-][user]: invalid credentials for login");
+        return false;
+    }
+
+    public boolean login(SealedObject user) throws RemoteException {
         return false;
     }
 
@@ -103,6 +120,10 @@ public class Auctioneer implements Auction {
         return auctions;
     }
 
+    public HashMap getSoldAuctions(SealedObject user) throws RemoteException {
+        return itemsClosed;
+    }
+
     /*
      * The user argument user is needed to check that they have the correct
      * privileges to close the specified auction
@@ -129,6 +150,10 @@ public class Auctioneer implements Auction {
             return 0;
         }
 
+    }
+
+    public int closeAuction(int ID, SealedObject user) {
+        return 3;
     }
 
     public String getAuctionWinner(int ID) {
