@@ -1,4 +1,8 @@
+import javax.crypto.Cipher;
 import javax.crypto.SealedObject;
+import javax.crypto.SecretKey;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +47,7 @@ public class Auctioneer implements Auction {
     }
 
     public int bid(int ID, double bidAmount, SealedObject user) throws RemoteException {
-        return 3;
+        return bid(ID, bidAmount, (User) unseal(user));
     }
 
     public boolean addItem(Item item) throws RemoteException {
@@ -55,7 +59,7 @@ public class Auctioneer implements Auction {
     }
 
     public boolean addItem(SealedObject item) throws RemoteException {
-        return false;
+        return addItem((Item) unseal(item));
     }
 
     /*
@@ -76,7 +80,7 @@ public class Auctioneer implements Auction {
     }
 
     public boolean addUser(SealedObject user) throws RemoteException {
-        return false;
+        return addUser((User) unseal(user));
     }
 
     public boolean login(User user) throws RemoteException {
@@ -92,7 +96,7 @@ public class Auctioneer implements Auction {
     }
 
     public boolean login(SealedObject user) throws RemoteException {
-        return false;
+        return login((User) unseal(user));
     }
 
     public HashMap getAvailableAuctions() throws RemoteException {
@@ -121,7 +125,7 @@ public class Auctioneer implements Auction {
     }
 
     public HashMap getSoldAuctions(SealedObject user) throws RemoteException {
-        return itemsClosed;
+        return getSoldAuctions((User) unseal(user));
     }
 
     /*
@@ -149,11 +153,10 @@ public class Auctioneer implements Auction {
             System.out.println("[+][item]: " + item.getName() + " (" + ID + ") was closed successfully");
             return 0;
         }
-
     }
 
-    public int closeAuction(int ID, SealedObject user) {
-        return 3;
+    public int closeAuction(int ID, SealedObject user) throws RemoteException {
+        return closeAuction(ID, (User) unseal(user));
     }
 
     public String getAuctionWinner(int ID) {
@@ -164,6 +167,29 @@ public class Auctioneer implements Auction {
         }
 
         return item.getBidder();
+    }
+
+    private Object unseal(SealedObject obj) {
+        try {
+            return obj.getObject(getKey());
+        } catch (Exception e) {
+            System.out.print("failed");
+        }
+
+        return null;
+    }
+
+    private SecretKey getKey() {
+        try {
+            FileInputStream fis = new FileInputStream("files/secret.key");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            SecretKey obj = (SecretKey) ois.readObject();
+            ois.close();
+            return obj;
+        } catch (Exception e) {
+            System.out.println("Failed reading key\n\n" + e);
+        }
+        return null;
     }
 
 }
