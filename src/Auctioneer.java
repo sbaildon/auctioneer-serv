@@ -12,6 +12,7 @@ public class Auctioneer implements Auction {
     ArrayList<User> users = new ArrayList<User>();
     HashMap<Integer, Item> items = new HashMap<Integer, Item>();
     HashMap<Integer, Item> itemsClosed = new HashMap<Integer, Item>();
+    KeyGen keyGen = new KeyGen();
     int id = 0;
 
     public Auctioneer() {
@@ -80,13 +81,19 @@ public class Auctioneer implements Auction {
     }
 
     public boolean addUser(SealedObject user) throws RemoteException {
-        return addUser((User) unseal(user));
+        boolean cont;
+        User tmp;
+
+        tmp = (User) unseal(user);
+        cont = addUser((User) unseal(user));
+
+        return cont;
     }
 
     public boolean login(User user) throws RemoteException {
         int i;
         for(i = 0; i < users.size(); i++) {
-            if (users.get(i).getName().equals(user.getName()) && users.get(i).getEmail().equals(user.getEmail())) {
+            if (users.get(i).getPassword().equals(user.getPassword()) && users.get(i).getEmail().equals(user.getEmail())) {
                 System.out.println("[+][user]: " + user.email + " logged in");
                 return true;
             }

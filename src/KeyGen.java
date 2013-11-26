@@ -12,7 +12,7 @@ public class KeyGen {
     ObjectOutputStream objStream;
     int i;
 
-    public KeyGen(String fileName) {
+    public void newKey(String fileName) {
         file = new File(fileName);
         try {
             System.out.println(++i);
