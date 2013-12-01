@@ -12,7 +12,6 @@ public class Auctioneer implements Auction {
     ArrayList<User> users = new ArrayList<User>();
     HashMap<Integer, Item> items = new HashMap<Integer, Item>();
     HashMap<Integer, Item> itemsClosed = new HashMap<Integer, Item>();
-    KeyGen keyGen = new KeyGen();
     int id = 0;
 
     public Auctioneer() {
@@ -47,7 +46,7 @@ public class Auctioneer implements Auction {
         return 0;
     }
 
-    public int bid(int ID, double bidAmount, SealedObject user) throws RemoteException {
+    public int bid(int ID, double bidAmount, String email, SealedObject user) throws RemoteException {
         return bid(ID, bidAmount, (User) unseal(user));
     }
 
@@ -59,7 +58,7 @@ public class Auctioneer implements Auction {
         return true;
     }
 
-    public boolean addItem(SealedObject item) throws RemoteException {
+    public boolean addItem(String email, SealedObject item) throws RemoteException {
         return addItem((Item) unseal(item));
     }
 
@@ -67,27 +66,17 @@ public class Auctioneer implements Auction {
      * Every user must have a unique identifier, in this case
      * it is email. User won't be added unless it's unique
      */
-    public boolean addUser(User user) throws RemoteException {
+    public SecretKey addUser(User user) throws RemoteException {
         int i;
         for(i = 0; i < users.size(); i++) {
             if (users.get(i).getEmail().equalsIgnoreCase(user.getEmail())) {
                 System.out.println("[-][user]: attempted to add duplicate user " + user.getEmail());
-                return false;
+                return null;
             }
         }
         users.add(user);
         System.out.println("[+][user]: " + user.email + " was registered");
-        return true;
-    }
-
-    public boolean addUser(SealedObject user) throws RemoteException {
-        boolean cont;
-        User tmp;
-
-        tmp = (User) unseal(user);
-        cont = addUser((User) unseal(user));
-
-        return cont;
+        return KeyGen.generateKey(user.getEmail());
     }
 
     public boolean login(User user) throws RemoteException {
@@ -102,7 +91,7 @@ public class Auctioneer implements Auction {
         return false;
     }
 
-    public boolean login(SealedObject user) throws RemoteException {
+    public boolean login(String email, SealedObject user) throws RemoteException {
         return login((User) unseal(user));
     }
 
@@ -131,7 +120,7 @@ public class Auctioneer implements Auction {
         return auctions;
     }
 
-    public HashMap getSoldAuctions(SealedObject user) throws RemoteException {
+    public HashMap getSoldAuctions(String email, SealedObject user) throws RemoteException {
         return getSoldAuctions((User) unseal(user));
     }
 
@@ -162,16 +151,12 @@ public class Auctioneer implements Auction {
         }
     }
 
-    public int closeAuction(int ID, SealedObject user) throws RemoteException {
+    public int closeAuction(int ID, String email, SealedObject user) throws RemoteException {
         return closeAuction(ID, (User) unseal(user));
     }
 
     public String getAuctionWinner(int ID) {
         Item item = itemsClosed.get(ID);
-
-        if (item == null) {
-            return "Shouldn't have found null";
-        }
 
         return item.getBidder();
     }
@@ -188,7 +173,7 @@ public class Auctioneer implements Auction {
 
     private SecretKey getKey() {
         try {
-            FileInputStream fis = new FileInputStream("files/secret.key");
+            FileInputStream fis = new FileInputStream("secret");
             ObjectInputStream ois = new ObjectInputStream(fis);
             SecretKey obj = (SecretKey) ois.readObject();
             ois.close();
