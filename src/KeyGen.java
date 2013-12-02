@@ -31,7 +31,7 @@ public class KeyGen {
 
             return skey;
         } catch (Exception e) {
-            System.out.println("[-][skey] Could not generate SecretKey at " + fileName);
+            System.out.println("[-][skey] Could not generate SecretKey for " + fileName);
         }
             return null;
     }

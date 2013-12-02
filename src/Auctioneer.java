@@ -35,7 +35,7 @@ public class Auctioneer implements Auction {
             System.out.println("[-][item]: " + item.name + " (" + ID + ") was bid on by its owner");
             return 2;
         }
-        if (item.getPrice() > bidAmount) {
+        if (item.getPrice() >= bidAmount) {
             System.out.println("[-][item]: bid on " + item.name + " (" + ID + ") was too little");
             return 1;
         }
@@ -47,7 +47,8 @@ public class Auctioneer implements Auction {
     }
 
     public int bid(int ID, double bidAmount, String email, SealedObject user) throws RemoteException {
-        return bid(ID, bidAmount, (User) unseal(user));
+        SecretKey tmpKey = getKey(email);
+        return bid(ID, bidAmount, (User) unseal(user, tmpKey));
     }
 
     public boolean addItem(Item item) throws RemoteException {
@@ -59,7 +60,8 @@ public class Auctioneer implements Auction {
     }
 
     public boolean addItem(String email, SealedObject item) throws RemoteException {
-        return addItem((Item) unseal(item));
+        SecretKey tmpKey = getKey(email);
+        return addItem((Item) unseal(item, tmpKey));
     }
 
     /*
@@ -92,7 +94,8 @@ public class Auctioneer implements Auction {
     }
 
     public boolean login(String email, SealedObject user) throws RemoteException {
-        return login((User) unseal(user));
+        SecretKey tmpKey = getKey(email);
+        return login((User) unseal(user, tmpKey));
     }
 
     public HashMap getAvailableAuctions() throws RemoteException {
@@ -121,7 +124,8 @@ public class Auctioneer implements Auction {
     }
 
     public HashMap getSoldAuctions(String email, SealedObject user) throws RemoteException {
-        return getSoldAuctions((User) unseal(user));
+        SecretKey tmpKey = getKey(email);
+        return getSoldAuctions((User) unseal(user, tmpKey));
     }
 
     /*
@@ -152,7 +156,8 @@ public class Auctioneer implements Auction {
     }
 
     public int closeAuction(int ID, String email, SealedObject user) throws RemoteException {
-        return closeAuction(ID, (User) unseal(user));
+        SecretKey tmpKey = getKey(email);
+        return closeAuction(ID, (User) unseal(user, tmpKey));
     }
 
     public String getAuctionWinner(int ID) {
@@ -161,25 +166,25 @@ public class Auctioneer implements Auction {
         return item.getBidder();
     }
 
-    private Object unseal(SealedObject obj) {
+    private Object unseal(SealedObject obj, SecretKey skey) {
         try {
-            return obj.getObject(getKey());
+            return obj.getObject(skey);
         } catch (Exception e) {
-            System.out.print("failed");
+            System.out.print("[-][skey] Could not unseal object");
         }
 
         return null;
     }
 
-    private SecretKey getKey() {
+    private SecretKey getKey(String fileName) {
         try {
-            FileInputStream fis = new FileInputStream("secret");
+            FileInputStream fis = new FileInputStream("keys/" + fileName + ".key");
             ObjectInputStream ois = new ObjectInputStream(fis);
             SecretKey obj = (SecretKey) ois.readObject();
             ois.close();
             return obj;
         } catch (Exception e) {
-            System.out.println("Failed reading key\n\n" + e);
+            System.out.println("[-][skey] Failed reading key\n\n" + e);
         }
         return null;
     }
