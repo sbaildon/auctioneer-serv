@@ -1,3 +1,8 @@
+import org.jgroups.Channel;
+import org.jgroups.JChannel;
+import org.jgroups.blocks.MethodCall;
+import org.jgroups.blocks.RpcDispatcher;
+
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
@@ -5,8 +10,10 @@ import java.util.Scanner;
 
 public class AuctioneerServer {
 
-    String serverID = "2";
+    String serverID = "1";
     Auction a;
+    Channel channel;
+    RpcDispatcher disp;
 
     public AuctioneerServer() {
 
@@ -29,6 +36,12 @@ public class AuctioneerServer {
             return;
         }
 
+        try {
+            start();
+        } catch (Exception e) {
+            System.out.print("Couldn't connect to cluster");
+        }
+
         System.out.println("Server running with ID " + serverID);
 
         char input;
@@ -49,7 +62,14 @@ public class AuctioneerServer {
 
     }
 
-    public static void main(String args[]) {
+    private void start() throws Exception {
+        System.out.println("started");
+        channel = new JChannel();
+        channel.connect("AuctioneerServerCluster");
+        RpcDispatcher disp =new RpcDispatcher(channel, a);
+    }
+
+    public static void main(String args[]){
         new AuctioneerServer();
     }
 }
