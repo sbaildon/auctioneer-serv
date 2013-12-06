@@ -4,22 +4,23 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.util.Random;
 
 public class KeyGen {
 
-    File file;
-    OutputStream stream;
-    ObjectOutputStream objStream;
-    int i;
+    static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    public KeyGen(String fileName) {
-        file = new File(fileName);
+    static public SecretKey generateKey(String fileName) {
+        File file;
+        OutputStream stream;
+        ObjectOutputStream objStream;
+        file = new File("keys/" + fileName + ".key");
+
         try {
-            System.out.println(++i);
             stream = new FileOutputStream(file);
             objStream = new ObjectOutputStream(stream);
 
-            DESKeySpec desKeySpec = new DESKeySpec("xjhg6sa8".getBytes());
+            DESKeySpec desKeySpec = new DESKeySpec("01234567".getBytes());
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
             SecretKey skey = keyFactory.generateSecret(desKeySpec);
 
@@ -27,8 +28,19 @@ public class KeyGen {
 
             stream.close();
             objStream.close();
+
+            return skey;
         } catch (Exception e) {
-            System.out.println("failed");
+            System.out.println("[-][skey] Could not generate SecretKey for " + fileName);
         }
+            return null;
+    }
+
+    static private String generateString() {
+        Random rnd = new Random();
+        StringBuilder sb = new StringBuilder(8);
+        for( int i = 0; i < 8; i++ )
+            sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
+        return sb.toString();
     }
 }

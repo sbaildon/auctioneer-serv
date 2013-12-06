@@ -2,18 +2,18 @@ import java.io.*;
 
 public class User implements Serializable {
     String email;
-    String userName;
+    String password;
 
-    public User(String userName, String email) {
-        this.userName = userName;
+    public User(String email, String password) {
         this.email = email;
-    }
-
-    protected String getName() {
-        return this.userName;
+        this.password = password;
     }
 
     protected String getEmail() {
         return this.email;
+    }
+
+    protected String getPassword() {
+        return this.password;
     }
 }
