@@ -20,7 +20,7 @@ public class KeyGen {
             stream = new FileOutputStream(file);
             objStream = new ObjectOutputStream(stream);
 
-            DESKeySpec desKeySpec = new DESKeySpec(generateString().getBytes());
+            DESKeySpec desKeySpec = new DESKeySpec("01234567".getBytes());
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
             SecretKey skey = keyFactory.generateSecret(desKeySpec);
 

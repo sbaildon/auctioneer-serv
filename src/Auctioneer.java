@@ -1,14 +1,14 @@
-import javax.crypto.Cipher;
 import javax.crypto.SealedObject;
 import javax.crypto.SecretKey;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.jgroups.*;
+import org.jgroups.blocks.ReplicatedHashMap;
 
-public class Auctioneer implements Auction {
+public class Auctioneer extends ReceiverAdapter implements Auction{
     ArrayList<User> users = new ArrayList<User>();
     HashMap<Integer, Item> items = new HashMap<Integer, Item>();
     HashMap<Integer, Item> itemsClosed = new HashMap<Integer, Item>();
@@ -71,7 +71,7 @@ public class Auctioneer implements Auction {
     public SecretKey addUser(User user) throws RemoteException {
         int i;
         for(i = 0; i < users.size(); i++) {
-            if (users.get(i).getEmail().equalsIgnoreCase(user.getEmail())) {
+                if (users.get(i).getEmail().equalsIgnoreCase(user.getEmail())) {
                 System.out.println("[-][user]: attempted to add duplicate user " + user.getEmail());
                 return null;
             }
@@ -187,6 +187,10 @@ public class Auctioneer implements Auction {
             System.out.println("[-][skey] Failed reading key\n\n" + e);
         }
         return null;
+    }
+
+    public void receive(Message msg) {
+        System.out.println("JGroup");
     }
 
 }
