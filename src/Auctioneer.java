@@ -7,15 +7,34 @@ import java.util.HashMap;
 import java.util.Map;
 import org.jgroups.*;
 import org.jgroups.blocks.ReplicatedHashMap;
+import org.jgroups.blocks.RequestOptions;
+import org.jgroups.blocks.ResponseMode;
+import org.jgroups.blocks.RpcDispatcher;
 
-public class Auctioneer extends ReceiverAdapter implements Auction{
+public class Auctioneer implements Auction{
     ArrayList<User> users = new ArrayList<User>();
     HashMap<Integer, Item> items = new HashMap<Integer, Item>();
     HashMap<Integer, Item> itemsClosed = new HashMap<Integer, Item>();
+    Channel channel;
+    RpcDispatcher disp;
+    RequestOptions opts = new RequestOptions(ResponseMode.GET_ALL, 5000);
+
     int id = 0;
 
     public Auctioneer() {
         super();
+        start();
+    }
+
+    private void start() {
+        try {
+            channel = new JChannel();
+            disp = new RpcDispatcher(channel, this);
+            channel.connect("AuctioneerServerCluster");
+            System.out.println("Connected to cluster");
+            User user = new User("sean", "email");
+
+        } catch (Exception e) {}
     }
 
     /*
@@ -23,7 +42,11 @@ public class Auctioneer extends ReceiverAdapter implements Auction{
      * handled properly at the client end.
      * 3 = fail, 2 = can't bid on own items, 1 = needs more money, 0 = success
      */
-    public int bid(int ID, double bidAmount, User user) throws RemoteException {
+    public int bid(BidItem bidItem) throws RemoteException {
+        int ID = bidItem.getItemId();
+        double bidAmount = bidItem.getBidAmount();
+        User user = bidItem.getUser();
+
         Item item = items.get(ID);
 
         if (item == null) {
@@ -46,9 +69,9 @@ public class Auctioneer extends ReceiverAdapter implements Auction{
         return 0;
     }
 
-    public int bid(int ID, double bidAmount, String email, SealedObject user) throws RemoteException {
+    public int bid(String email, SealedObject bidItem) throws RemoteException {
         SecretKey tmpKey = getKey(email);
-        return bid(ID, bidAmount, (User) unseal(user, tmpKey));
+        return bid((BidItem) unseal(bidItem, tmpKey));
     }
 
     public boolean addItem(Item item) throws RemoteException {
@@ -69,7 +92,9 @@ public class Auctioneer extends ReceiverAdapter implements Auction{
      * it is email. User won't be added unless it's unique
      */
     public SecretKey addUser(User user) throws RemoteException {
-        int i;
+        try {
+        } catch (Exception e) { System.out.println("Failed"); }
+            int i;
         for(i = 0; i < users.size(); i++) {
                 if (users.get(i).getEmail().equalsIgnoreCase(user.getEmail())) {
                 System.out.println("[-][user]: attempted to add duplicate user " + user.getEmail());
@@ -79,6 +104,10 @@ public class Auctioneer extends ReceiverAdapter implements Auction{
         users.add(user);
         System.out.println("[+][user]: " + user.email + " was registered");
         return KeyGen.generateKey(user.getEmail());
+    }
+
+    public static void printUser(User user) {
+        System.out.println(user.getEmail());
     }
 
     public boolean login(User user) throws RemoteException {
@@ -187,10 +216,6 @@ public class Auctioneer extends ReceiverAdapter implements Auction{
             System.out.println("[-][skey] Failed reading key\n\n" + e);
         }
         return null;
-    }
-
-    public void receive(Message msg) {
-        System.out.println("JGroup");
     }
 
 }

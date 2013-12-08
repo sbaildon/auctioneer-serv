@@ -6,10 +6,10 @@ import java.util.HashMap;
 
 public interface Auction extends Remote {
 
-    public int bid(int itemID, double bidAmount, User user)
+    public int bid(BidItem bidItem)
             throws RemoteException;
 
-    public int bid(int itemID, double bidAmount, String email, SealedObject user)
+    public int bid(String email, SealedObject bidItem)
             throws RemoteException;
 
     public boolean addItem(Item item)
