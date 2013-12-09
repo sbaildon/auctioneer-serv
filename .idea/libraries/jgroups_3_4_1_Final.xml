@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="jgroups-3.4.1.Final">
     <CLASSES>
-      <root url="jar:///Library/Java/Extensions/jgroups-3.4.1.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/Auctioneer Server/jgroups-3.4.1.Final.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

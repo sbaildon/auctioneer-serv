@@ -6,42 +6,39 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.jgroups.*;
-import org.jgroups.blocks.ReplicatedHashMap;
 import org.jgroups.blocks.RequestOptions;
 import org.jgroups.blocks.ResponseMode;
 import org.jgroups.blocks.RpcDispatcher;
+import org.jgroups.util.RspList;
+import org.jgroups.util.Util;
 
-public class Auctioneer implements Auction{
+public class Auctioneer extends ReceiverAdapter implements Auction {
     ArrayList<User> users = new ArrayList<User>();
     HashMap<Integer, Item> items = new HashMap<Integer, Item>();
     HashMap<Integer, Item> itemsClosed = new HashMap<Integer, Item>();
     Channel channel;
     RpcDispatcher disp;
-    RequestOptions opts = new RequestOptions(ResponseMode.GET_ALL, 5000);
+    RequestOptions opts;
 
     int id = 0;
 
     public Auctioneer() {
         super();
-        start();
+        connectToChannel();
     }
 
-    private void start() {
+    public void connectToChannel() {
         try {
             channel = new JChannel();
             disp = new RpcDispatcher(channel, this);
             channel.connect("AuctioneerServerCluster");
+            opts = new RequestOptions(ResponseMode.GET_ALL, 5000);
             System.out.println("Connected to cluster");
-            User user = new User("sean", "email");
-
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            System.out.println("Failed to connect to cluster");
+        }
     }
 
-    /*
-     * Please take note of the correct return values, so they can be
-     * handled properly at the client end.
-     * 3 = fail, 2 = can't bid on own items, 1 = needs more money, 0 = success
-     */
     public int bid(BidItem bidItem) throws RemoteException {
         int ID = bidItem.getItemId();
         double bidAmount = bidItem.getBidAmount();
@@ -82,19 +79,25 @@ public class Auctioneer implements Auction{
         return true;
     }
 
-    public boolean addItem(String email, SealedObject item) throws RemoteException {
+    public boolean addItemLocal(String email, SealedObject item) throws RemoteException {
         SecretKey tmpKey = getKey(email);
         return addItem((Item) unseal(item, tmpKey));
     }
 
-    /*
-     * Every user must have a unique identifier, in this case
-     * it is email. User won't be added unless it's unique
-     */
-    public SecretKey addUser(User user) throws RemoteException {
+    public boolean addItem(String email, SealedObject item) throws RemoteException {
+        RspList responses;
         try {
-        } catch (Exception e) { System.out.println("Failed"); }
-            int i;
+            responses = disp.callRemoteMethods(null, "addItemLocal", new Object[] {email, item}, new Class[] {String.class, SealedObject.class}, opts);
+        } catch (Exception e) {
+            responses = new RspList();
+        }
+
+        boolean bool = (Boolean) responses.getFirst();
+        return bool;
+    }
+
+    public SecretKey addUserLocal(User user) throws RemoteException {
+        int i;
         for(i = 0; i < users.size(); i++) {
                 if (users.get(i).getEmail().equalsIgnoreCase(user.getEmail())) {
                 System.out.println("[-][user]: attempted to add duplicate user " + user.getEmail());
@@ -106,8 +109,14 @@ public class Auctioneer implements Auction{
         return KeyGen.generateKey(user.getEmail());
     }
 
-    public static void printUser(User user) {
-        System.out.println(user.getEmail());
+    public SecretKey addUser(User user) throws RemoteException {
+        try {
+            disp.callRemoteMethods(null, "addUserLocal", new Object[] {user}, new Class[]{User.class}, opts);
+        } catch (Exception e) {
+            return null;
+        }
+
+        return KeyGen.generateKey(user.getEmail());
     }
 
     public boolean login(User user) throws RemoteException {
@@ -131,10 +140,6 @@ public class Auctioneer implements Auction{
         return items;
     }
 
-    /*
-     * Provide a user and find all auctions where this particular
-     * user is the winner
-     */
     public HashMap getSoldAuctions(User user) throws RemoteException {
         HashMap<Integer, Item> auctions = new HashMap<Integer, Item>();
         String email = user.getEmail();
@@ -157,10 +162,6 @@ public class Auctioneer implements Auction{
         return getSoldAuctions((User) unseal(user, tmpKey));
     }
 
-    /*
-     * The user argument user is needed to check that they have the correct
-     * privileges to close the specified auction
-     */
     public int closeAuction(int ID, User user) throws RemoteException {
         Item item = items.get(ID);
 
@@ -184,12 +185,24 @@ public class Auctioneer implements Auction{
         }
     }
 
-    public int closeAuction(int ID, String email, SealedObject user) throws RemoteException {
+    public int closeAuctionLocal(int ID, String email, SealedObject user) throws RemoteException {
         SecretKey tmpKey = getKey(email);
         return closeAuction(ID, (User) unseal(user, tmpKey));
     }
 
-    public String getAuctionWinner(int ID) {
+    public int closeAuction(int id, String email, SealedObject user) throws RemoteException {
+        RspList responses;
+        try {
+            responses = disp.callRemoteMethods(null, "closeAuctionLocal", new Object[] {id, email, user}, new Class[] {int.class, String.class, SealedObject.class}, opts);
+        } catch (Exception e) {
+            responses = new RspList();
+        }
+
+        int i = (Integer) responses.getFirst();
+        return i;
+    }
+
+    public String getAuctionWinner(int ID) throws RemoteException {
         Item item = itemsClosed.get(ID);
 
         return item.getBidder();

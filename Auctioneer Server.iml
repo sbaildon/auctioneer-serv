@@ -7,7 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="jgroups-3.4.1.Final" level="project" />
+    <orderEntry type="library" name="jgroups-3.4.1.Final" level="project" />
   </component>
 </module>
 

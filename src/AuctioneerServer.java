@@ -1,19 +1,15 @@
 import org.jgroups.Channel;
-import org.jgroups.JChannel;
-import org.jgroups.blocks.MethodCall;
-import org.jgroups.blocks.RpcDispatcher;
 
 import java.rmi.Naming;
+import java.rmi.Remote;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
 public class AuctioneerServer {
 
-    String serverID = "1";
+    int serverID;
     Auction a;
-    Channel channel;
-    RpcDispatcher disp;
 
     public AuctioneerServer() {
 
@@ -27,19 +23,15 @@ public class AuctioneerServer {
                 return;
             }
 
+            serverID = Naming.list("rmi://localhost:2020/").length;
+
             Auction stub = (Auction) UnicastRemoteObject.exportObject(a, 0);
             Naming.rebind("//localhost:2020/AuctioneerService" + serverID, stub);
 
-            a.addUser(new User("email", "password"));
+            //a.addUser(new User("email", "password"));
         } catch (Exception e) {
             System.out.println("Couldn't bind remote object\n\n" + e);
             return;
-        }
-
-        try {
-            start();
-        } catch (Exception e) {
-            System.out.print("Couldn't connect to cluster");
         }
 
         System.out.println("Server running with ID " + serverID);
@@ -60,13 +52,6 @@ public class AuctioneerServer {
             System.out.println("Couldn't unbind remote object");
         }
 
-    }
-
-    private void start() throws Exception {
-        System.out.println("started");
-        channel = new JChannel();
-        channel.connect("AuctioneerServerCluster");
-        RpcDispatcher disp =new RpcDispatcher(channel, a);
     }
 
     public static void main(String args[]){
