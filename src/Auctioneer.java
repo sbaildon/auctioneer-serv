@@ -5,6 +5,8 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.jgroups.Channel;
+import org.jgroups.JChannel;
 import org.jgroups.*;
 import org.jgroups.blocks.RequestOptions;
 import org.jgroups.blocks.ResponseMode;
@@ -17,26 +19,76 @@ public class Auctioneer extends ReceiverAdapter implements Auction {
     HashMap<Integer, Item> items = new HashMap<Integer, Item>();
     HashMap<Integer, Item> itemsClosed = new HashMap<Integer, Item>();
     Channel channel;
+    Channel stateChannel;
     RpcDispatcher disp;
     RequestOptions opts;
+
+    HashMap<Integer, Object> state = new HashMap<Integer, Object>();
 
     int id = 0;
 
     public Auctioneer() {
         super();
-        connectToChannel();
+        start();
+        startState();
     }
 
-    public void connectToChannel() {
+    public void start() {
         try {
+            opts = new RequestOptions(ResponseMode.GET_ALL, 1000);
             channel = new JChannel();
             disp = new RpcDispatcher(channel, this);
-            channel.connect("AuctioneerServerCluster");
-            opts = new RequestOptions(ResponseMode.GET_ALL, 5000);
+            channel.setReceiver(this);
+            channel.connect("AuctioneerServerCluster", null, 0);
             System.out.println("Connected to cluster");
         } catch (Exception e) {
             System.out.println("Failed to connect to cluster");
         }
+    }
+
+    public void startState() {
+        try {
+            stateChannel = new JChannel();
+            stateChannel.setReceiver(this);
+            stateChannel.connect("StateCluster", null, 0);
+            stateChannel.getState(null, 0);
+        } catch (Exception e) {
+            System.out.println("Failed to get state");
+        }
+    }
+
+    public void getState(OutputStream output) {
+        synchronized(state) {
+            state.clear();
+            state.put(1, users);
+            state.put(2, items);
+            state.put(3, itemsClosed);
+
+            try {
+                Util.objectToStream(state, new DataOutputStream(output));
+            } catch (Exception e) {
+                System.out.println("Couldn't output state");
+            }
+        }
+    }
+
+    public void setState(InputStream input) {
+        HashMap<Integer, Object> stateReceived;
+
+        try {
+            stateReceived = (HashMap<Integer, Object>) Util.objectFromStream(new DataInputStream(input));
+        } catch (Exception e) {
+            System.out.println("Couldn't receive state");
+            return;
+        }
+        synchronized (state) {
+            state.clear();
+            state = stateReceived;
+        }
+
+        users = (ArrayList<User>) stateReceived.get(1);
+        items = (HashMap<Integer, Item>) stateReceived.get(2);
+        itemsClosed = (HashMap<Integer, Item>) stateReceived.get(3);
     }
 
     public int bid(BidItem bidItem) throws RemoteException {
@@ -66,9 +118,21 @@ public class Auctioneer extends ReceiverAdapter implements Auction {
         return 0;
     }
 
-    public int bid(String email, SealedObject bidItem) throws RemoteException {
+    public int bidLocal(String email, SealedObject bidItem) throws RemoteException {
         SecretKey tmpKey = getKey(email);
         return bid((BidItem) unseal(bidItem, tmpKey));
+    }
+
+    public int bid(String email, SealedObject bidItem) throws RemoteException {
+        RspList responses;
+        try {
+            responses = disp.callRemoteMethods(null, "bidLocal", new Object[] {email, bidItem}, new Class[] {String.class, SealedObject.class}, opts);
+        } catch (Exception e) {
+            responses = new RspList();
+        }
+
+        int response = (Integer) responses.getFirst();
+        return response;
     }
 
     public boolean addItem(Item item) throws RemoteException {
@@ -110,13 +174,15 @@ public class Auctioneer extends ReceiverAdapter implements Auction {
     }
 
     public SecretKey addUser(User user) throws RemoteException {
+        RspList responses;
         try {
-            disp.callRemoteMethods(null, "addUserLocal", new Object[] {user}, new Class[]{User.class}, opts);
+            responses = disp.callRemoteMethods(null, "addUserLocal", new Object[] {user}, new Class[]{User.class}, opts);
         } catch (Exception e) {
-            return null;
+            responses = null;
         }
 
-        return KeyGen.generateKey(user.getEmail());
+        SecretKey skey = (SecretKey) responses.getFirst();
+        return skey;
     }
 
     public boolean login(User user) throws RemoteException {
@@ -230,5 +296,4 @@ public class Auctioneer extends ReceiverAdapter implements Auction {
         }
         return null;
     }
-
 }

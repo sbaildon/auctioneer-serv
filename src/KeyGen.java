@@ -16,11 +16,14 @@ public class KeyGen {
         ObjectOutputStream objStream;
         file = new File("keys/" + fileName + ".key");
 
+        String s = fileName.substring(0, 1);
+        String key = s + "1234567";
+
         try {
             stream = new FileOutputStream(file);
             objStream = new ObjectOutputStream(stream);
 
-            DESKeySpec desKeySpec = new DESKeySpec("01234567".getBytes());
+            DESKeySpec desKeySpec = new DESKeySpec(key.getBytes());
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
             SecretKey skey = keyFactory.generateSecret(desKeySpec);
 
