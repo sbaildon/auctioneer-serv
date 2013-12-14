@@ -33,6 +33,8 @@ public class Auctioneer extends ReceiverAdapter implements Auction {
         startState();
     }
 
+
+
     public void start() {
         try {
             opts = new RequestOptions(ResponseMode.GET_ALL, 1000);
@@ -295,5 +297,10 @@ public class Auctioneer extends ReceiverAdapter implements Auction {
             System.out.println("[-][skey] Failed reading key\n\n" + e);
         }
         return null;
+    }
+
+    public void closeChannel() {
+        stateChannel.close();
+        channel.close();
     }
 }

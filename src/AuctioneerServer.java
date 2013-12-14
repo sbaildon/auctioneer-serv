@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class AuctioneerServer {
 
     int serverID = 3;
-    Auction a;
+    Auctioneer a;
 
     public AuctioneerServer() {
 
@@ -41,6 +41,7 @@ public class AuctioneerServer {
         inputScanner.close();
 
         try {
+            a.closeChannel();
             Naming.unbind("//localhost:2020/AuctioneerService" + serverID);
             UnicastRemoteObject.unexportObject(a, false);
         } catch (Exception e) {
